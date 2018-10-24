@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    defaultConfig {
+        applicationId "jhondoe.com.domiciliosserver"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled false
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support:design:25.3.1'
+    //Firebase
+    //FirebaseUI for Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database:9.8.0'
+    //FirebaseUI for Firebase Auth
+    implementation 'com.google.firebase:firebase-auth:9.8.0'
+    //FirebaseUI for Cloud Storage
+    implementation 'com.google.firebase:firebase-storage:9.8.0'
+    // For location
+    implementation 'com.android.support:support-v4:25.4.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // Add Library
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.google.code.gson:gson:2.3.1'
+    implementation 'com.github.mancj:MaterialSearchBar:0.7.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.jaredrummler:material-spinner:1.1.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.github.d-max:spots-dialog:0.7@aar'
+    implementation 'com.github.rey5137:material:1.2.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.0.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'io.paperdb:paperdb:2.1'
+    implementation 'com.android.support:multidex:1.0.0'
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:0.6.2'
+}
+
+apply plugin: 'com.google.gms.google-services'
