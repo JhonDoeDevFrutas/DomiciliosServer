@@ -30,4 +30,7 @@
     <string name="title_activity_product">ActivityProduct</string>
     <string name="provider.hint.name">Nombre</string>
     <string name="provider.hint.order">Orden</string>
+    <string name="label.upload">Subir</string>
+    <string name="label.select">Seleccionar</string>
+    <string name="message.upload.success">Imagen subida exitosamente</string>
 </resources>

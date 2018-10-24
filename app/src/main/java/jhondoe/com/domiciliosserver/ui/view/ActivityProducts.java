@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,9 +34,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import jhondoe.com.domiciliosserver.R;
@@ -43,14 +50,31 @@ import jhondoe.com.domiciliosserver.provider.FirebaseReferences;
 import jhondoe.com.domiciliosserver.ui.adapter.ProductAdapter;
 
 public class ActivityProducts extends AppCompatActivity {
+    private static final int RC_GALLERY = 21;
+    private static final int RC_CAMERA = 22;
+
+    private static final int RP_CAMERA = 121;
+    private static final int RP_STORAGE = 122;
+
+    private static final String IMAGE_DIRECTORY = "/MyPhotoApp";
+    private static final String MY_PHOTO = "my_photo/";
+
+    private static final String PATH_PROFILE = "profile";
+    private static final String PATH_PHOTO_URL = "photoUrl";
+
+    private String mCurrentPhotoPath;
+    private Uri mPhotoSelectUri;
+
     public static final String CATEGORIA_ID = "categoriaid";
     public static final String PRODUCT_ID = "productoid";
+
 
     // Referencias UI
     private RecyclerView mReciclador;
     private ProductAdapter mAdapter;
 
     EditText edtName, edtDescription, edtCharacteristics, edtProperties, edtPrice;
+    ImageView imgPhoto;
     Button btnSelect, btnUpload;
 
     private String mId;
@@ -66,7 +90,6 @@ public class ActivityProducts extends AppCompatActivity {
     Producto mProducto;
 
     Uri saveUri;
-    private final int PICK_IMAGE_REQUEST = 71;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +149,18 @@ public class ActivityProducts extends AppCompatActivity {
         edtProperties       = (EditText) add_product.findViewById(R.id.edt_properties);
         edtPrice            = (EditText) add_product.findViewById(R.id.edt_price);
 
+        imgPhoto            = (ImageView) add_product.findViewById(R.id.img_photo);
+
         btnSelect           = (Button ) add_product.findViewById(R.id.btn_select);
         btnUpload           = (Button ) add_product.findViewById(R.id.btn_upload);
 
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseImage(); // let user select image from gallery and save url of this image
+                //chooseImage(); // let user select image from gallery and save url of this image
+                //fromGallery();
+                //fromCamera();
+                dispatchTakePictureIntent();
             }
         });
 
@@ -172,18 +200,18 @@ public class ActivityProducts extends AppCompatActivity {
 
     private void uploadImage() {
 
-        if (saveUri != null){
+        if (mPhotoSelectUri != null){
             final ProgressDialog mDialog = new ProgressDialog(ActivityProducts.this);
             mDialog.setMessage("Uploading...");
             mDialog.show();
 
-            final StorageReference imageFolder = mStorageReference.child("images/"+ UUID.randomUUID().toString());
-            imageFolder.putFile(saveUri)
+            final StorageReference imageFolder = mStorageReference.child(MY_PHOTO+ UUID.randomUUID().toString());
+            imageFolder.putFile(mPhotoSelectUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mDialog.dismiss();
-                            Toast.makeText(getBaseContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityProducts.this, "Imagen subida exitosamente", Toast.LENGTH_SHORT).show();
 
                             imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
@@ -211,7 +239,7 @@ public class ActivityProducts extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             mDialog.dismiss();
-                            Toast.makeText(ActivityProducts.this, "Failed"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ActivityProducts.this, "Error al subir la imagen intente mas tarde "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -229,9 +257,51 @@ public class ActivityProducts extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST) ;
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_GALLERY) ;
 
         btnSelect.setText("Imagen Seleccionada");
+    }
+
+    private void fromGallery(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, RC_CAMERA);
+    }
+
+    private void fromCamera(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, RC_GALLERY);
+    }
+
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null){
+            File photoFile;
+            photoFile = createImageFile();
+
+            if (photoFile != null){
+                Uri photoUri = FileProvider.getUriForFile(this,
+                        "jhondoe.com.domiciliosserver", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(takePictureIntent, RC_CAMERA);
+            }
+        }
+    }
+
+    private File createImageFile() {
+        final String timeStamp = new SimpleDateFormat("dd--MM--yyyy_HHmmss", Locale.ROOT)
+                .format(new Date());
+        final String imageFileName = MY_PHOTO + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+            mCurrentPhotoPath = image.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
     }
 
     @Override
@@ -284,19 +354,46 @@ public class ActivityProducts extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case RC_GALLERY:
+                    if (data != null && data.getData() != null){
+                        mPhotoSelectUri = data.getData();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
+                                    mPhotoSelectUri);
+                            imgPhoto.setImageBitmap(bitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case RC_CAMERA:
+                    /*Bundle extras = data.getExtras();
+                    Bitmap bitmap = (Bitmap)extras.get("data");*/
+                    mPhotoSelectUri = addPicGallery();
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mPhotoSelectUri);
+                        imgPhoto.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            saveUri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(ActivityProducts.this.getContentResolver(), saveUri);
-                //imageView.setImageBitmap(bitmap);
-            }catch (IOException e){
-                e.printStackTrace();
+                    break;
             }
         }
 
+    }
+
+    private Uri addPicGallery() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+        mCurrentPhotoPath = null;
+        return contentUri;
     }
 
 }
