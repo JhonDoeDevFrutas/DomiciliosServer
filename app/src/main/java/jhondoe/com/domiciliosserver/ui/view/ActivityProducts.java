@@ -174,7 +174,7 @@ public class ActivityProducts extends AppCompatActivity {
         alertDialog.setView(add_product);
         alertDialog.setIcon(R.drawable.ic_add);
         // set button
-        alertDialog.setPositiveButton("Guardar...", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Guardar.", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
