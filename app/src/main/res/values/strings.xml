@@ -32,5 +32,13 @@
     <string name="provider.hint.order">Orden</string>
     <string name="label.upload">Subir</string>
     <string name="label.select">Seleccionar</string>
+    <string name="label.camera">Camara</string>
+    <string name="label.gallery">Galeria</string>
     <string name="message.upload.success">Imagen subida exitosamente</string>
+    <string name="title_activity_product_store">ActivityProductStore</string>
+    <string name="item.product.count">Nombre:\n Cantida:</string>
+    <string name="item.product.data">%s \n(x%s)</string>
+    <string name="error.permission.denied">Lo siento, no tienes permiso para ver el inventario</string>
+    <string name="error.server">Error en el servidor, Intente más tarde</string>
+    <string name="error.remove">Lo siento, usted no tiene permiso de eliminar un producto.</string>
 </resources>

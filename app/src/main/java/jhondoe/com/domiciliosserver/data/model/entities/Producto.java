@@ -1,12 +1,25 @@
 package jhondoe.com.domiciliosserver.data.model.entities;
 
+import com.google.firebase.database.Exclude;
+
 public class Producto {
+
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String IMAGE = "image";
+    public static final String PRECI = "preci";
+    public static final String DESCOUNT = "descount";
+    public static final String QUANTITY = "quantity";
+
+    @Exclude
     private String id;
     private String nombre;
     private String descripcion;
     private String imagen;
     private String precio;
     private String descuento;
+    private int cantidad;
 
     public Producto() {
     }
@@ -21,11 +34,11 @@ public class Producto {
     }
 
     // Get & Set
-
+    @Exclude
     public String getId() {
         return id;
     }
-
+    @Exclude
     public void setId(String id) {
         this.id = id;
     }
@@ -68,5 +81,28 @@ public class Producto {
 
     public void setDescuento(String descuento) {
         this.descuento = descuento;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Producto producto = (Producto) o;
+
+        return id != null ? id.equals(producto.id) : producto.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

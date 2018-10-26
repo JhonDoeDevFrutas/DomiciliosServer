@@ -1,15 +1,20 @@
 package jhondoe.com.domiciliosserver.ui.view;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,17 +62,16 @@ public class ActivityProducts extends AppCompatActivity {
     private static final int RP_STORAGE = 122;
 
     private static final String IMAGE_DIRECTORY = "/MyPhotoApp";
-    private static final String MY_PHOTO = "my_photo/";
+    private static final String MY_PHOTO = "my_photo";
 
     private static final String PATH_PROFILE = "profile";
     private static final String PATH_PHOTO_URL = "photoUrl";
 
     private String mCurrentPhotoPath;
-    private Uri mPhotoSelectUri;
+    private Uri mPhotoSelectedUri;
 
     public static final String CATEGORIA_ID = "categoriaid";
     public static final String PRODUCT_ID = "productoid";
-
 
     // Referencias UI
     private RecyclerView mReciclador;
@@ -75,7 +79,7 @@ public class ActivityProducts extends AppCompatActivity {
 
     EditText edtName, edtDescription, edtCharacteristics, edtProperties, edtPrice;
     ImageView imgPhoto;
-    Button btnSelect, btnUpload;
+    Button btnGallery, btnCamera, btnUpload;
 
     private String mId;
 
@@ -151,16 +155,27 @@ public class ActivityProducts extends AppCompatActivity {
 
         imgPhoto            = (ImageView) add_product.findViewById(R.id.img_photo);
 
-        btnSelect           = (Button ) add_product.findViewById(R.id.btn_select);
+        btnGallery           = (Button ) add_product.findViewById(R.id.btn_gallery);
+        btnCamera           = (Button ) add_product.findViewById(R.id.btn_camera);
         btnUpload           = (Button ) add_product.findViewById(R.id.btn_upload);
 
-        btnSelect.setOnClickListener(new View.OnClickListener() {
+        btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //chooseImage(); // let user select image from gallery and save url of this image
+
                 //fromGallery();
+                checkPermissionToApp(Manifest.permission.READ_EXTERNAL_STORAGE, RP_STORAGE);
+            }
+        });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 //fromCamera();
-                dispatchTakePictureIntent();
+                //dispatchTakePictureIntent();
+
+                checkPermissionToApp(Manifest.permission.CAMERA, RP_CAMERA);
             }
         });
 
@@ -198,15 +213,34 @@ public class ActivityProducts extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void checkPermissionToApp(String permissionStr, int requestPermission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, permissionStr) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{permissionStr}, requestPermission);
+                return;
+            }
+        }
+
+        switch (requestPermission){
+            case RP_STORAGE:
+                fromGallery();
+                break;
+            case RP_CAMERA:
+                dispatchTakePictureIntent();
+                break;
+        }
+    }
+
+
     private void uploadImage() {
 
-        if (mPhotoSelectUri != null){
+        if (mPhotoSelectedUri != null){
             final ProgressDialog mDialog = new ProgressDialog(ActivityProducts.this);
             mDialog.setMessage("Uploading...");
             mDialog.show();
 
             final StorageReference imageFolder = mStorageReference.child(MY_PHOTO+ UUID.randomUUID().toString());
-            imageFolder.putFile(mPhotoSelectUri)
+            imageFolder.putFile(mPhotoSelectedUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -259,20 +293,21 @@ public class ActivityProducts extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_GALLERY) ;
 
-        btnSelect.setText("Imagen Seleccionada");
+        btnGallery.setText("Imagen Seleccionada");
     }
 
     private void fromGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, RC_GALLERY);
+        btnGallery.setText("Imagen Seleccionada");
+    }
+
+    private void fromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, RC_CAMERA);
     }
 
-    private void fromCamera(){
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, RC_GALLERY);
-    }
-
-    private void dispatchTakePictureIntent(){
+    private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null){
             File photoFile;
@@ -288,7 +323,7 @@ public class ActivityProducts extends AppCompatActivity {
     }
 
     private File createImageFile() {
-        final String timeStamp = new SimpleDateFormat("dd--MM--yyyy_HHmmss", Locale.ROOT)
+        final String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HHmmss", Locale.ROOT)
                 .format(new Date());
         final String imageFileName = MY_PHOTO + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -302,6 +337,23 @@ public class ActivityProducts extends AppCompatActivity {
         }
 
         return image;
+    }
+
+    private void onProducto(Producto producto) {
+        Intent intentProduct = new Intent(getBaseContext(), ActivityProduct.class);
+        intentProduct.putExtra(CATEGORIA_ID, mId);
+        intentProduct.putExtra(PRODUCT_ID, producto.getId());
+        startActivity(intentProduct);
+    }
+
+    private Uri addPicGallery() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+        mCurrentPhotoPath = null;
+        return contentUri;
     }
 
     @Override
@@ -343,13 +395,6 @@ public class ActivityProducts extends AppCompatActivity {
         });
     }
 
-    private void onProducto(Producto producto) {
-        Intent intentProduct = new Intent(getBaseContext(), ActivityProduct.class);
-        intentProduct.putExtra(CATEGORIA_ID, mId);
-        intentProduct.putExtra(PRODUCT_ID, producto.getId());
-        startActivity(intentProduct);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -358,10 +403,10 @@ public class ActivityProducts extends AppCompatActivity {
             switch (requestCode){
                 case RC_GALLERY:
                     if (data != null && data.getData() != null){
-                        mPhotoSelectUri = data.getData();
+                        mPhotoSelectedUri = data.getData();
                         try {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                                    mPhotoSelectUri);
+                                    mPhotoSelectedUri);
                             imgPhoto.setImageBitmap(bitmap);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -371,10 +416,10 @@ public class ActivityProducts extends AppCompatActivity {
                 case RC_CAMERA:
                     /*Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap)extras.get("data");*/
-                    mPhotoSelectUri = addPicGallery();
+                    mPhotoSelectedUri = addPicGallery();
                     Bitmap bitmap = null;
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mPhotoSelectUri);
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mPhotoSelectedUri);
                         imgPhoto.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -386,14 +431,20 @@ public class ActivityProducts extends AppCompatActivity {
 
     }
 
-    private Uri addPicGallery() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File file = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(file);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-        mCurrentPhotoPath = null;
-        return contentUri;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            switch (requestCode){
+                case RP_STORAGE:
+                    fromGallery();
+                    break;
+                case RP_CAMERA:
+                    dispatchTakePictureIntent();
+                    break;
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
 
 }

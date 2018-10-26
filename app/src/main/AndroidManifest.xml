@@ -43,17 +43,22 @@
         <service
             android:name=".service.ListenOrder"
             android:enabled="true"
-            android:exported="true"/>
-        
+            android:exported="true" />
+
         <provider
-            android:authorities="jhondoe.com.domiciliosserver"
             android:name="android.support.v4.content.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+            android:authorities="jhondoe.com.domiciliosserver"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <activity
+            android:name=".ui.view.ActivityProductStore"
+            android:label="@string/title_activity_product_store"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

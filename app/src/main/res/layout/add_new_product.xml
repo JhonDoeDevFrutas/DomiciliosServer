@@ -80,14 +80,14 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:weightSum="2"
+            android:weightSum="3"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/btn_select"
-                android:text="@string/label.select"
+                android:id="@+id/btn_gallery"
+                android:text="@string/label.gallery"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_margin="8dp"
@@ -95,6 +95,18 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_camera"
+                android:text="@string/label.camera"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_margin="8dp"
+                android:width="0dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
 
             <Button
                 android:id="@+id/btn_upload"
