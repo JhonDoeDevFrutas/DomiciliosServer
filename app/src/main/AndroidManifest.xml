@@ -58,6 +58,10 @@
         <activity
             android:name=".ui.view.ActivityProductStore"
             android:label="@string/title_activity_product_store"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.view.productStoreModule.view.ProductStoreActivity"
+            android:label="@string/title_activity_product_store"
             android:theme="@style/AppTheme"></activity>
     </application>
 

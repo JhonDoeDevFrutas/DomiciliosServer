@@ -1,22 +1,19 @@
 package jhondoe.com.domiciliosserver.ui.view;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import java.util.ArrayList;
 
 import jhondoe.com.domiciliosserver.R;
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
 import jhondoe.com.domiciliosserver.ui.adapter.ProductStoreAdapter;
-import jhondoe.com.domiciliosserver.ui.productModule.ProductStorePresenter;
-import jhondoe.com.domiciliosserver.ui.productModule.ProductStorePresenterClass;
+import jhondoe.com.domiciliosserver.ui.view.productModule.ProductStorePresenter;
+import jhondoe.com.domiciliosserver.ui.view.productModule.ProductStorePresenterClass;
 
 public class ActivityProductStore extends AppCompatActivity implements ProductStoreView{
 
@@ -59,14 +56,6 @@ public class ActivityProductStore extends AppCompatActivity implements ProductSt
     }
 
     private void prepararFab() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override

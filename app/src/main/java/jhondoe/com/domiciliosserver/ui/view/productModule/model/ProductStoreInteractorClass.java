@@ -1,10 +1,10 @@
-package jhondoe.com.domiciliosserver.ui.productModule.model;
+package jhondoe.com.domiciliosserver.ui.view.productModule.model;
 
 import jhondoe.com.domiciliosserver.common.BasicErrorEventCallback;
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
-import jhondoe.com.domiciliosserver.ui.productModule.events.ProductEvent;
-import jhondoe.com.domiciliosserver.ui.productModule.model.dataAccess.ProductsEventListener;
-import jhondoe.com.domiciliosserver.ui.productModule.model.dataAccess.RealtimeDatabase;
+import jhondoe.com.domiciliosserver.ui.view.productModule.events.ProductEvent;
+import jhondoe.com.domiciliosserver.ui.view.productModule.model.dataAccess.ProductsEventListener;
+import jhondoe.com.domiciliosserver.ui.view.productModule.model.dataAccess.RealtimeDatabase;
 
 public class ProductStoreInteractorClass implements ProductStoreInteractor {
     private RealtimeDatabase mDatabase;

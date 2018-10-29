@@ -1,4 +1,4 @@
-package jhondoe.com.domiciliosserver.ui.productModule.model.dataAccess;
+package jhondoe.com.domiciliosserver.ui.view.productModule.model.dataAccess;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -9,8 +9,7 @@ import jhondoe.com.domiciliosserver.R;
 import jhondoe.com.domiciliosserver.common.BasicErrorEventCallback;
 import jhondoe.com.domiciliosserver.data.model.dataAccess.FirebaseRealtimeDatabaseAPI;
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
-import jhondoe.com.domiciliosserver.ui.productModule.events.ProductEvent;
-import jhondoe.com.domiciliosserver.ui.productModule.model.dataAccess.ProductsEventListener;
+import jhondoe.com.domiciliosserver.ui.view.productModule.events.ProductEvent;
 
 public class RealtimeDatabase {
     private static final String PATH_PRODUCTS = "products";
@@ -19,7 +18,7 @@ public class RealtimeDatabase {
     private ChildEventListener mProductsChildEventListener;
 
     public RealtimeDatabase() {
-        mDatabaseAPI = FirebaseRealtimeDatabaseAPI.getIntance();
+        mDatabaseAPI = FirebaseRealtimeDatabaseAPI.getInstance();
     }
 
     private DatabaseReference getProductsReference(){

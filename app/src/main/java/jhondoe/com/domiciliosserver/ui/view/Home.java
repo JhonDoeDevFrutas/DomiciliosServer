@@ -19,6 +19,7 @@ import jhondoe.com.domiciliosserver.R;
 import jhondoe.com.domiciliosserver.common.Common;
 import jhondoe.com.domiciliosserver.data.preferences.SessionPrefs;
 import jhondoe.com.domiciliosserver.service.ListenOrder;
+import jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.view.FragmentOrderDetail;
 import jhondoe.com.domiciliosserver.utilies.Uweb;
 
 public class Home extends AppCompatActivity
@@ -158,7 +159,7 @@ public class Home extends AppCompatActivity
             manager.beginTransaction().replace(R.id.content_frame, new FragmentOrderStatus()).commit();
 
         } else if (id == R.id.nav_budget) {
-
+            manager.beginTransaction().replace(R.id.content_frame, new FragmentOrderDetail()).commit();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_provider) {

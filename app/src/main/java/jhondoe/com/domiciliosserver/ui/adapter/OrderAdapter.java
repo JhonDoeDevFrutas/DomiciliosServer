@@ -22,7 +22,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
 
     // Instancia de escucha
     private OnItemSelectedListener mOnItemSelectedListener;
-
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     public OrderAdapter(Context context, List<Solicitud> items){
         this.mContext = context;
@@ -33,9 +33,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         void onItemClick(Solicitud clickedOrder);
     }
 
+    public interface OnItemLongClickListener {
+        boolean onItemLongClick(int position);
+    }
+
     public interface  OnItemSelectedListener{
         void onMenuAction(Solicitud selectOrder, MenuItem item);
     }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongSelected){
+        mOnItemLongClickListener = onItemLongSelected;
+    }
+
 
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener){
         mOnItemSelectedListener = onItemSelectedListener;
@@ -64,7 +73,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
         return mItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, View.OnLongClickListener, PopupMenu.OnMenuItemClickListener{
 
         public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderAddress;
 
@@ -94,6 +103,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
 
             if (position != RecyclerView.NO_POSITION){
                 mOnItemSelectedListener.onMenuAction(mItems.get(position), item);
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION){
+                mOnItemLongClickListener.onItemLongClick(position);
+                return true;
             }
 
             return false;

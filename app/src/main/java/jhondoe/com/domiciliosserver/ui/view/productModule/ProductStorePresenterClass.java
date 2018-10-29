@@ -1,9 +1,9 @@
-package jhondoe.com.domiciliosserver.ui.productModule;
+package jhondoe.com.domiciliosserver.ui.view.productModule;
 
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
-import jhondoe.com.domiciliosserver.ui.productModule.events.ProductEvent;
-import jhondoe.com.domiciliosserver.ui.productModule.model.ProductStoreInteractor;
-import jhondoe.com.domiciliosserver.ui.productModule.model.ProductStoreInteractorClass;
+import jhondoe.com.domiciliosserver.ui.view.productModule.events.ProductEvent;
+import jhondoe.com.domiciliosserver.ui.view.productModule.model.ProductStoreInteractor;
+import jhondoe.com.domiciliosserver.ui.view.productModule.model.ProductStoreInteractorClass;
 import jhondoe.com.domiciliosserver.ui.view.ProductStoreView;
 
 public class ProductStorePresenterClass implements ProductStorePresenter {
@@ -27,7 +27,7 @@ public class ProductStorePresenterClass implements ProductStorePresenter {
     }
 
     @Override
-    public void Resume() {
+    public void onResume() {
         mInteractor.subscribeToProducts();
     }
 

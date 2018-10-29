@@ -1,4 +1,4 @@
-package jhondoe.com.domiciliosserver.ui.productModule.model;
+package jhondoe.com.domiciliosserver.ui.view.productModule.model;
 
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
 

@@ -129,6 +129,12 @@ public class FragmentOrderStatus extends Fragment {
                             }
                         }
                     });
+                    mAdapter.setOnItemLongClickListener(new OrderAdapter.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(int position) {
+                            return false;
+                        }
+                    });
 
                     mReciclador.setAdapter(mAdapter);
                 }

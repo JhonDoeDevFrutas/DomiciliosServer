@@ -1,7 +1,7 @@
-package jhondoe.com.domiciliosserver.ui.productModule;
+package jhondoe.com.domiciliosserver.ui.view.productModule;
 
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
-import jhondoe.com.domiciliosserver.ui.productModule.events.ProductEvent;
+import jhondoe.com.domiciliosserver.ui.view.productModule.events.ProductEvent;
 
 public interface ProductStorePresenter {
     void onCreate();

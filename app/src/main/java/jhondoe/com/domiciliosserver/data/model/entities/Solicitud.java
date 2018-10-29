@@ -3,6 +3,13 @@ package jhondoe.com.domiciliosserver.data.model.entities;
 import java.util.List;
 
 public class Solicitud {
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String PHONE = "phone";
+    public static final String ADDRESS = "address";
+    public static final String TOTAL = "total";
+    public static final String STATUS = "status";
+
     private String id;
     private String phone;
     private String name;
