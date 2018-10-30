@@ -95,6 +95,6 @@ public class FragmentOrderDetail extends Fragment implements OrderDetailView{
         if (getActivity() != null){
                 getActivity().onBackPressed();
                 }
-*/
+    */
 
 }

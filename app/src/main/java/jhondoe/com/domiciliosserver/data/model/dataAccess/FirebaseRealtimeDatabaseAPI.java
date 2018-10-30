@@ -34,4 +34,5 @@ public class FirebaseRealtimeDatabaseAPI {
     public DatabaseReference getProductsReference(){
         return getReference().child(PATH_PRODUCTS);
     }
+
 }

@@ -1,6 +1,5 @@
 package jhondoe.com.domiciliosserver.ui.view.OrderStatusModule;
 
-import jhondoe.com.domiciliosserver.data.model.entities.Solicitud;
 import jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.events.OrderStatusEvent;
 
 public interface OrderStatusPresenter {

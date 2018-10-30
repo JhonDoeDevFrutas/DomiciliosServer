@@ -3,7 +3,6 @@ package jhondoe.com.domiciliosserver.ui.view.OrderStatusModule;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import jhondoe.com.domiciliosserver.data.model.entities.Solicitud;
 import jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.events.OrderStatusEvent;
 import jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.model.OrderStatusInteractor;
 import jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.model.OrderStatusInteractorClass;

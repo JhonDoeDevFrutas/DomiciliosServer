@@ -6,4 +6,5 @@ public interface OrderStatusEventListener {
     void onChildUpdated(Solicitud solicitud);
 
     void onError(int resMsg);
+
 }

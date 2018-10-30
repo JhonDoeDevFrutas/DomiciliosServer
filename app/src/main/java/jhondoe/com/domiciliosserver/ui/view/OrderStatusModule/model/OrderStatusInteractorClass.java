@@ -50,5 +50,4 @@ public class OrderStatusInteractorClass implements OrderStatusInteractor {
         event.setResMsg(resMsg);
         EventBus.getDefault().post(event);
     }
-
 }

@@ -1,7 +1,5 @@
 package jhondoe.com.domiciliosserver.ui.view.OrderStatusModule.view;
 
-import jhondoe.com.domiciliosserver.data.model.entities.Solicitud;
-
 public interface OrderDetailView {
     void showProgress();
     void hideProgress();
