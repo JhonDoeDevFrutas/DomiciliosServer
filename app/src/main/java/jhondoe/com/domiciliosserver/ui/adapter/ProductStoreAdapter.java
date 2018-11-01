@@ -103,5 +103,4 @@ public class ProductStoreAdapter extends RecyclerView.Adapter<ProductStoreAdapte
         return mItems.size();
     }
 
-
 }

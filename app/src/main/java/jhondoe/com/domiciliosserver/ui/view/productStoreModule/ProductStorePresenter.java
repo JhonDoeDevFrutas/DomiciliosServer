@@ -6,11 +6,8 @@ import jhondoe.com.domiciliosserver.ui.view.productStoreModule.events.ProductSto
 public interface ProductStorePresenter {
     void onCreate();
     void onPause();
-    void onResume();
+    void onResume(String idCategory);
     void onDestroy();
 
-    void updateProduct(Producto producto);
-
     void onEventListener(ProductStoreEvent event);
-
 }

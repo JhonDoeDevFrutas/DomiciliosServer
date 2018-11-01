@@ -1,7 +1,5 @@
 package jhondoe.com.domiciliosserver.data.model.entities;
 
-import com.google.firebase.database.Exclude;
-
 public class Producto {
 
     public static final String ID = "id";
@@ -12,7 +10,6 @@ public class Producto {
     public static final String DESCOUNT = "descount";
     public static final String QUANTITY = "quantity";
 
-    @Exclude
     private String id;
     private String nombre;
     private String descripcion;
@@ -34,11 +31,10 @@ public class Producto {
     }
 
     // Get & Set
-    @Exclude
     public String getId() {
         return id;
     }
-    @Exclude
+
     public void setId(String id) {
         this.id = id;
     }
@@ -91,7 +87,7 @@ public class Producto {
         this.cantidad = cantidad;
     }
 
-    @Override
+/*    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -104,5 +100,5 @@ public class Producto {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
-    }
+    }*/
 }

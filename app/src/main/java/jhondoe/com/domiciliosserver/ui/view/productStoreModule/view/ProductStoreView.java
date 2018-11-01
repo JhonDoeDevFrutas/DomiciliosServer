@@ -1,21 +1,18 @@
 package jhondoe.com.domiciliosserver.ui.view.productStoreModule.view;
 
+import java.util.List;
+
 import jhondoe.com.domiciliosserver.data.model.entities.Producto;
 
+/*
+    Tiene la responsabilidad de presentar los datos y de reaccionar ante los eventos de pulsación
+    que ejecute el usuario
+ */
 public interface ProductStoreView {
     void showProgress();
     void hideProgress();
-    void enableUIElements();
-    void disableUIElements();
 
-    void showFab();
-    void hideFab();
+    void addDatas(List<Producto> datas);
 
-    void add(Producto producto);
-    void update(Producto producto);
-    void delete(Producto producto);
-
-    void removeFail();
     void onShowError(int resMsg);
-
 }

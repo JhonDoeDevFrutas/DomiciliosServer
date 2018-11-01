@@ -40,6 +40,7 @@ import jhondoe.com.domiciliosserver.R;
 import jhondoe.com.domiciliosserver.data.model.entities.Categoria;
 import jhondoe.com.domiciliosserver.provider.FirebaseReferences;
 import jhondoe.com.domiciliosserver.ui.adapter.CategoryAdapter;
+import jhondoe.com.domiciliosserver.ui.view.productStoreModule.view.ProductStoreActivity;
 
 public class ActivityCategory extends AppCompatActivity {
     public static final String CATEGORIA_ID = "categoriaid";
@@ -262,6 +263,10 @@ public class ActivityCategory extends AppCompatActivity {
         Intent intentProducts = new Intent(ActivityCategory.this, ActivityProducts.class);
         intentProducts.putExtra(CATEGORIA_ID, categoria.getId());
         startActivity(intentProducts);
+
+        /*Intent intentProductStore = new Intent(ActivityCategory.this, ProductStoreActivity.class);
+        intentProductStore.putExtra(Categoria.ID, categoria.getId());
+        startActivity(intentProductStore);*/
     }
 
     @Override

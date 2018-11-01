@@ -1,6 +1,9 @@
 package jhondoe.com.domiciliosserver.data.model.entities;
 
 public class Categoria {
+
+    public static final String ID = "id";
+
     private String id;
     private String descripcion;
     private String imagen;
